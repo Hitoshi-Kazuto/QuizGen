@@ -1,0 +1,398 @@
+.student-dashboard {
+  min-height: 100vh;
+  background-color: var(--gray-100);
+}
+
+.dashboard-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background-color: white;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.dashboard-nav h1 {
+  color: var(--primary);
+  margin: 0;
+  font-size: var(--font-size-2xl);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.user-info span {
+  color: var(--gray-700);
+  font-weight: 500;
+}
+
+.logout-button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--danger);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.logout-button:hover {
+  background-color: #d90429;
+  transform: translateY(-2px);
+}
+
+.dashboard-content {
+  padding: var(--spacing-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.error {
+  background-color: rgba(247, 37, 133, 0.1);
+  color: var(--danger);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  margin-bottom: var(--spacing-md);
+  border: 1px solid rgba(247, 37, 133, 0.2);
+}
+
+/* Access Code Form */
+.access-code-form {
+  background-color: white;
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-xl);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.access-code-form h3 {
+  color: var(--gray-800);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.access-code-form form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.access-code-input {
+  flex: 1;
+  padding: var(--spacing-md);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
+}
+
+.access-code-btn {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  flex: 1;
+}
+
+.access-code-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.cancel-btn {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--gray-500);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  flex: 1;
+}
+
+.cancel-btn:hover {
+  background-color: var(--gray-600);
+  transform: translateY(-2px);
+}
+
+/* Quiz List Section */
+.quiz-list-section h2 {
+  color: var(--gray-800);
+  margin-bottom: var(--spacing-lg);
+}
+
+.quiz-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.quiz-card {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.quiz-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.quiz-card h3 {
+  color: var(--primary);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.quiz-card p {
+  color: var(--gray-600);
+  margin: var(--spacing-xs) 0;
+}
+
+.quiz-card .quiz-description {
+  color: var(--gray-700);
+  margin-bottom: var(--spacing-md);
+  flex-grow: 1;
+}
+
+.start-quiz-btn {
+  width: 100%;
+  padding: var(--spacing-md);
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  margin-top: var(--spacing-md);
+  transition: all var(--transition-normal);
+}
+
+.start-quiz-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* Attempts Section */
+.attempts-section {
+  margin-top: var(--spacing-xl);
+  background-color: white;
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.attempts-section h3 {
+  color: var(--gray-800);
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+.attempts-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.attempt-card {
+  background-color: var(--gray-100);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  border-left: 4px solid var(--primary);
+}
+
+.attempt-card h4 {
+  color: var(--gray-800);
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: var(--font-size-md);
+}
+
+.attempt-card p {
+  color: var(--gray-600);
+  margin: var(--spacing-xs) 0;
+  font-size: var(--font-size-sm);
+}
+
+/* Quiz Section */
+.quiz-section {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.quiz-description {
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-xl);
+  font-size: var(--font-size-md);
+}
+
+.back-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--gray-500);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  margin-bottom: var(--spacing-lg);
+  transition: all var(--transition-normal);
+}
+
+.back-btn:hover {
+  background-color: var(--gray-600);
+  transform: translateY(-2px);
+}
+
+.question {
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.question-text {
+  color: var(--gray-800);
+  font-size: var(--font-size-md);
+  margin-bottom: var(--spacing-md);
+  font-weight: 500;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.option-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  box-sizing: border-box;
+}
+
+.option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+.option input[type="radio"],
+.option input[type="checkbox"] {
+  margin: 0;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.option label {
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  flex: 1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  display: inline-block;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.5rem;
+  align-items: stretch;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.question {
+  background-color: var(--gray-100);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.question-text {
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: var(--gray-900);
+  text-align: left;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: var(--spacing-md);
+  background-color: var(--success);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  margin-top: var(--spacing-md);
+}
+
+.submit-btn:hover {
+  background-color: #388e3c;
+  transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+  background-color: var(--gray-400);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.score-section {
+  text-align: center;
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-xl);
+  background-color: var(--gray-100);
+  border-radius: var(--border-radius-lg);
+}
+
+.score-section h3 {
+  color: var(--gray-800);
+  margin-bottom: var(--spacing-lg);
+}
+
+.try-again-btn {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.try-again-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+} 
