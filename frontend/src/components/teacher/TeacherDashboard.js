@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 import jsPDF from 'jspdf';
 import './TeacherDashboard.css';
 
@@ -41,7 +42,7 @@ function TeacherDashboard() {
   const fetchTeacherQuizzes = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/quizzes/teacher', {
+      const response = await axios.get(`${API_BASE_URL}/quizzes/teacher`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSavedQuizzes(response.data);
@@ -66,7 +67,7 @@ function TeacherDashboard() {
 
     setIsLoading(true);
     try {
-      const response = await axios.post('http://localhost:8000/generate-quiz', {
+      const response = await axios.post(`${API_BASE_URL}/generate-quiz`, {
         text: text,
         quiz_type: quizType,
         difficulty: quizDifficulty
@@ -138,7 +139,7 @@ function TeacherDashboard() {
     setError(null);
 
     try {
-      const response = await axios.post('http://localhost:8000/scrape-website', {
+      const response = await axios.post(`${API_BASE_URL}/scrape-website`, {
         url: websiteUrl
       });
 
@@ -199,7 +200,7 @@ function TeacherDashboard() {
 
     try {
       const response = await axios.post(
-        'http://localhost:8000/quizzes',
+        `${API_BASE_URL}/quizzes`,
         {
           title: quizTitle,
           description: quizDescription,
@@ -293,7 +294,7 @@ function TeacherDashboard() {
   const viewQuizAttempts = async (quiz) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:8000/quizzes/${quiz._id}/attempts`, {
+      const response = await axios.get(`${API_BASE_URL}/quizzes/${quiz._id}/attempts`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSelectedQuizAttempts(response.data);

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 import './Login.css';
 
 function Login() {
@@ -21,7 +22,7 @@ function Login() {
       formData.append('username', email);
       formData.append('password', password);
 
-      const response = await axios.post('http://localhost:8000/token', formData);
+      const response = await axios.post(`${API_BASE_URL}/token`, formData);
       
       // Store the token and user type
       localStorage.setItem('token', response.data.access_token);

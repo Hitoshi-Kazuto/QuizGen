@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 import './StudentDashboard.css';
 
 const StudentDashboard = () => {
@@ -26,7 +27,7 @@ const StudentDashboard = () => {
     // Get user profile
     const fetchUserProfile = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/students/me', {
+        const response = await axios.get(`${API_BASE_URL}/students/me`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUser(response.data);
@@ -46,7 +47,7 @@ const StudentDashboard = () => {
   const fetchQuizzes = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/quizzes', {
+      const response = await axios.get(`${API_BASE_URL}/quizzes`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setQuizzes(response.data);
@@ -59,7 +60,7 @@ const StudentDashboard = () => {
   const fetchAttempts = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/attempts', {
+      const response = await axios.get(`${API_BASE_URL}/attempts`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAttempts(response.data);
@@ -85,7 +86,7 @@ const StudentDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:8000/quizzes/access',
+        `${API_BASE_URL}/quizzes/access`,
         { access_code: accessCode },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -149,7 +150,7 @@ const StudentDashboard = () => {
       }));
 
       const response = await axios.post(
-        'http://localhost:8000/quizzes/submit',
+        `${API_BASE_URL}/quizzes/submit`,
         {
           quiz_id: currentQuiz._id,
           answers: formattedAnswers

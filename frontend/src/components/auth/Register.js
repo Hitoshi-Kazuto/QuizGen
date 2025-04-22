@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 import './Register.css';
 
 function Register() {
@@ -40,7 +41,7 @@ function Register() {
     try {
       // Register user based on role
       const endpoint = role === 'teacher' ? '/teachers/register' : '/students/register';
-      const response = await axios.post(`http://localhost:8000${endpoint}`, {
+      const response = await axios.post(`${API_BASE_URL}${endpoint}`, {
         email,
         password,
         name
