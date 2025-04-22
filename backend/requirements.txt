@@ -16,3 +16,4 @@ newspaper3k==0.2.8
 nltk==3.8.1
 pydantic==2.5.2
 pydantic[email]==2.5.2 
+lxml[html_clean]
