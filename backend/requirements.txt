@@ -1,5 +1,6 @@
 fastapi==0.104.1
-gunicorn
+gunicorn==21.2.0
+beautifulsoup4==4.12.2
 uvicorn==0.23.2
 python-dotenv==1.0.0
 google-generativeai==0.3.1
@@ -9,4 +10,9 @@ pymongo==4.6.1
 motor==3.3.2
 bcrypt==4.1.2
 python-jose==3.3.0
-passlib==1.7.4 
+passlib==1.7.4
+requests==2.31.0
+newspaper3k==0.2.8
+nltk==3.8.1
+pydantic==2.5.2
+pydantic[email]==2.5.2 
