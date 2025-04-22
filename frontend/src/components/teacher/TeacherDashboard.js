@@ -106,7 +106,7 @@ function TeacherDashboard() {
     formData.append('file', file);
     
     try {
-      const response = await axios.post('http://localhost:8000/upload-pdf', formData, {
+      const response = await axios.post(`${API_BASE_URL}/upload-pdf`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
