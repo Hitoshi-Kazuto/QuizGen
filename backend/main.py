@@ -39,7 +39,7 @@ app = FastAPI()
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://quizgenerator-6qge.onrender.com", "https://quiz-generator-ashy.vercel.app/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
