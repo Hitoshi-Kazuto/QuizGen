@@ -182,7 +182,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Quiz Generator</h1>
+      <h1>TestifyAI</h1>
       
       <div className="input-section">
         <div className="file-upload">

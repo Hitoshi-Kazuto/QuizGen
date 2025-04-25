@@ -193,7 +193,7 @@ const StudentDashboard = () => {
   return (
     <div className="student-dashboard">
       <nav className="dashboard-nav">
-        <h1>Student Dashboard</h1>
+        <h1>TestifyAI - Student Dashboard</h1>
         <div className="user-info">
           {user && <span>Welcome, {user.name}</span>}
           <button className="logout-button" onClick={handleLogout}>Logout</button>
