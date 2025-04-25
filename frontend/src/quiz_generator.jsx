@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-// Main Quiz Generator Component
+// Main TestifyAI Component
 const QuizGenerator = () => {
   const [inputText, setInputText] = useState('');
   const [quizType, setQuizType] = useState('mcq');
@@ -40,7 +40,7 @@ const QuizGenerator = () => {
     <div className="container mx-auto p-4">
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
-          <CardTitle>Quiz Generator</CardTitle>
+          <CardTitle>TestifyAI</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

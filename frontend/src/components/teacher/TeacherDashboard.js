@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { API_BASE_URL } from '../../config';
 import jsPDF from 'jspdf';
+import XLSX from 'xlsx-js-style';
 import './TeacherDashboard.css';
+
+const API_BASE_URL = 'https://quizgenerator-6qge.onrender.com';
 
 function TeacherDashboard() {
   const navigate = useNavigate();
@@ -26,6 +28,8 @@ function TeacherDashboard() {
   const [selectedQuizForAttempts, setSelectedQuizForAttempts] = useState(null);
   const [websiteUrl, setWebsiteUrl] = useState('');
   const [isScrapingWebsite, setIsScrapingWebsite] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [selectedQuizForPreview, setSelectedQuizForPreview] = useState(null);
 
   useEffect(() => {
     // Check if user is logged in
@@ -226,7 +230,17 @@ function TeacherDashboard() {
     }
   };
 
-  const downloadQuiz = (quizToDownload) => {
+  const openQuizPreview = (quiz) => {
+    setSelectedQuizForPreview(quiz);
+    setShowPreview(true);
+  };
+
+  const closeQuizPreview = () => {
+    setShowPreview(false);
+    setSelectedQuizForPreview(null);
+  };
+
+  const downloadQuiz = (quizToDownload, includeAnswers = false) => {
     const doc = new jsPDF();
     
     // Set font sizes
@@ -281,14 +295,70 @@ function TeacherDashboard() {
           
           yPos += splitOptionText.length * 6 + 2;
         });
+
+        // Add correct answer if includeAnswers is true
+        if (includeAnswers) {
+          if (yPos > 270) {
+            doc.addPage();
+            yPos = 20;
+          }
+          
+          doc.setFont('helvetica', 'bold');
+          doc.setTextColor(0, 100, 0); // Dark green color for answers
+          
+          let answerText = '';
+          if (q.type === 'mcq' || q.type === 'true_false') {
+            answerText = `Correct Answer: ${q.correct_answer}`;
+          } else if (q.type === 'multi_answer') {
+            answerText = `Correct Answers: ${q.correct_answers.join(', ')}`;
+          }
+          
+          const splitAnswerText = doc.splitTextToSize(answerText, textWidth - 10);
+          doc.text(splitAnswerText, leftMargin + 10, yPos);
+          
+          yPos += splitAnswerText.length * 6 + 5;
+          doc.setTextColor(0, 0, 0); // Reset text color
+        }
         
         yPos += 5;
-      } else {
-        yPos += 15;
       }
     });
 
-    doc.save(`${quizToDownload.title || 'quiz'}.pdf`);
+    // Add answer key as a separate page if includeAnswers is true
+    if (includeAnswers) {
+      doc.addPage();
+      yPos = 20;
+      
+      doc.setFontSize(titleFontSize);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Answer Key', leftMargin, yPos);
+      yPos += 15;
+      
+      doc.setFontSize(questionFontSize);
+      quizToDownload.questions.forEach((q, index) => {
+        if (yPos > 270) {
+          doc.addPage();
+          yPos = 20;
+        }
+        
+        const questionNumber = `${index + 1}.`;
+        let answerText = '';
+        
+        if (q.type === 'mcq' || q.type === 'true_false') {
+          answerText = q.correct_answer;
+        } else if (q.type === 'multi_answer') {
+          answerText = q.correct_answers.join(', ');
+        }
+        
+        doc.text(questionNumber, leftMargin, yPos);
+        doc.text(answerText, leftMargin + 15, yPos);
+        
+        yPos += 10;
+      });
+    }
+
+    const filename = `${quizToDownload.title || 'quiz'}${includeAnswers ? '_with_answers' : ''}.pdf`;
+    doc.save(filename);
   };
 
   const viewQuizAttempts = async (quiz) => {
@@ -312,10 +382,66 @@ function TeacherDashboard() {
     setSelectedQuizForAttempts(null);
   };
 
+  const downloadAttemptsAsExcel = () => {
+    if (!selectedQuizAttempts.length) return;
+
+    try {
+      // Prepare data for Excel
+      const excelData = selectedQuizAttempts.map(attempt => ({
+        'Student Name': attempt.student_name,
+        'Score (%)': attempt.score,
+        'Submission Date': new Date(attempt.submitted_at).toLocaleString(),
+        'Total Questions': attempt.answers.length,
+        'Correct Answers': attempt.answers.filter(ans => ans.is_correct).length
+      }));
+
+      // Create worksheet
+      const ws = XLSX.utils.json_to_sheet(excelData);
+
+      // Add styles to headers
+      const headerStyle = {
+        font: { bold: true, color: { rgb: "FFFFFF" } },
+        fill: { fgColor: { rgb: "4472C4" } },
+        alignment: { horizontal: "center" }
+      };
+
+      // Get the range of cells in the worksheet
+      const range = XLSX.utils.decode_range(ws['!ref']);
+      
+      // Apply styles to header row
+      for (let C = range.s.c; C <= range.e.c; C++) {
+        const headerCell = XLSX.utils.encode_cell({ r: 0, c: C });
+        if (!ws[headerCell]) continue;
+        
+        ws[headerCell].s = headerStyle;
+      }
+
+      // Set column widths
+      const colWidths = [
+        { wch: 25 }, // Student Name
+        { wch: 10 }, // Score
+        { wch: 25 }, // Submission Date
+        { wch: 15 }, // Total Questions
+        { wch: 15 }, // Correct Answers
+      ];
+      ws['!cols'] = colWidths;
+
+      // Create workbook and add the worksheet
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Quiz Attempts');
+
+      // Generate Excel file and trigger download
+      XLSX.writeFile(wb, `${selectedQuizForAttempts.title}_attempts.xlsx`);
+    } catch (error) {
+      console.error('Error downloading Excel:', error);
+      setError('Failed to download attempts as Excel');
+    }
+  };
+
   return (
     <div className="teacher-dashboard">
       <nav className="dashboard-nav">
-        <h1>Teacher Dashboard</h1>
+        <h1>TestifyAI - Teacher Dashboard</h1>
         <button onClick={handleLogout} className="logout-button">
           Logout
         </button>
@@ -490,7 +616,7 @@ function TeacherDashboard() {
                 <p>Created: {new Date(quiz.created_at).toLocaleDateString()}</p>
                 <div className="quiz-actions">
                   <button 
-                    onClick={() => downloadQuiz(quiz)}
+                    onClick={() => openQuizPreview(quiz)}
                     className="download-btn"
                   >
                     Download Quiz
@@ -537,6 +663,68 @@ function TeacherDashboard() {
                 ) : (
                   <p className="no-attempts">No attempts yet for this quiz</p>
                 )}
+              </div>
+              {selectedQuizAttempts.length > 0 && (
+                <div className="attempts-actions">
+                  <button 
+                    onClick={downloadAttemptsAsExcel}
+                    className="download-attempts-btn"
+                  >
+                    Download Attempts as Excel
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Quiz Preview Modal */}
+        {showPreview && selectedQuizForPreview && (
+          <div className="quiz-preview-modal">
+            <div className="quiz-preview-content">
+              <div className="quiz-preview-header">
+                <h2>{selectedQuizForPreview.title}</h2>
+                <button onClick={closeQuizPreview} className="quiz-preview-close">&times;</button>
+              </div>
+              <div className="quiz-preview-body">
+                {selectedQuizForPreview.questions.map((q, index) => (
+                  <div key={index} className="quiz-preview-question">
+                    <p>{index + 1}. {q.text}</p>
+                    <div className="quiz-preview-options">
+                      {q.type === 'mcq' && q.options && q.options.map((option, optIndex) => (
+                        <div key={optIndex} className="quiz-preview-option">
+                          {String.fromCharCode(65 + optIndex)}. {option}
+                        </div>
+                      ))}
+                      {q.type === 'true_false' && (
+                        <>
+                          <div className="quiz-preview-option">A. True</div>
+                          <div className="quiz-preview-option">B. False</div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="quiz-preview-actions">
+                <button 
+                  onClick={() => {
+                    downloadQuiz(selectedQuizForPreview, false);
+                    closeQuizPreview();
+                  }}
+                  className="quiz-preview-button download-without-answers"
+                >
+                  Download Quiz
+                </button>
+                <button 
+                  onClick={() => {
+                    downloadQuiz(selectedQuizForPreview, true);
+                    closeQuizPreview();
+                  }}
+                  className="quiz-preview-button download-with-answers"
+                >
+                  Download with Answer Key
+                </button>
               </div>
             </div>
           </div>

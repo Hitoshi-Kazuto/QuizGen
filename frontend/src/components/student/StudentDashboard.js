@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { API_BASE_URL } from '../../config';
 import './StudentDashboard.css';
+
+const API_BASE_URL = 'https://quizgenerator-6qge.onrender.com';
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -15,6 +16,11 @@ const StudentDashboard = () => {
   const [user, setUser] = useState(null);
   const [attempts, setAttempts] = useState([]);
   const [selectedQuiz, setSelectedQuiz] = useState(null);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [showScore, setShowScore] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedAnswers, setSelectedAnswers] = useState({});
 
   useEffect(() => {
     // Check if user is logged in
@@ -78,10 +84,8 @@ const StudentDashboard = () => {
 
   const handleAccessCodeSubmit = async (e) => {
     e.preventDefault();
-    if (!accessCode.trim()) {
-      setError('Please enter an access code');
-      return;
-    }
+    setError('');
+    setIsLoading(true);
 
     try {
       const token = localStorage.getItem('token');
@@ -91,20 +95,18 @@ const StudentDashboard = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if (response.data.score !== undefined) {
-        // User has already attempted this quiz
-        setError(`You have already attempted this quiz. Your score was: ${response.data.score}%`);
-        setAccessCode('');
-        return;
+      if (response.data.message) {
+        // Quiz already attempted
+        setError(response.data.message);
+      } else {
+        setCurrentQuiz(response.data);
+        setShowQuiz(true);
       }
-
-      // Set the current quiz
-      setCurrentQuiz(response.data);
-      setAccessCode('');
-      setError('');
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to access quiz. Please check your access code.');
-      console.error('Error accessing quiz:', err);
+    } catch (error) {
+      console.error('Error accessing quiz:', error);
+      setError(error.response?.data?.detail || 'Failed to access quiz');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -124,7 +126,7 @@ const StudentDashboard = () => {
   };
 
   const handleAnswerSelect = (questionIndex, answer) => {
-    setAnswers(prev => ({
+    setSelectedAnswers(prev => ({
       ...prev,
       [questionIndex]: answer
     }));
@@ -133,38 +135,34 @@ const StudentDashboard = () => {
   const submitQuiz = async () => {
     if (!currentQuiz) return;
 
-    // Check if all questions are answered
-    const unansweredQuestions = currentQuiz.questions.filter((_, index) => !answers[index]);
-    if (unansweredQuestions.length > 0) {
-      setError('Please answer all questions before submitting.');
-      return;
-    }
+    setIsSubmitting(true);
+    setError('');
 
     try {
       const token = localStorage.getItem('token');
-      
-      // Format answers for submission
-      const formattedAnswers = Object.entries(answers).map(([index, answer]) => ({
-        question_id: currentQuiz.questions[index].id || index.toString(),
-        answer: answer
+      const answers = currentQuiz.questions.map((q, index) => ({
+        question_id: q.id || index.toString(),
+        answer: selectedAnswers[index] || ''
       }));
 
       const response = await axios.post(
         `${API_BASE_URL}/quizzes/submit`,
         {
           quiz_id: currentQuiz._id,
-          answers: formattedAnswers
+          answers: answers
         },
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setScore(response.data.score);
-      fetchAttempts(); // Refresh attempts after submission
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to submit quiz. Please try again.');
-      console.error('Error submitting quiz:', err);
+      setShowScore(true);
+      setShowQuiz(false);
+      await fetchAttempts(); // Refresh attempts after submission
+    } catch (error) {
+      console.error('Error submitting quiz:', error);
+      setError(error.response?.data?.detail || 'Failed to submit quiz');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -194,7 +192,7 @@ const StudentDashboard = () => {
   return (
     <div className="student-dashboard">
       <nav className="dashboard-nav">
-        <h1>Student Dashboard</h1>
+        <h1>TestifyAI - Student Dashboard</h1>
         <div className="user-info">
           {user && <span>Welcome, {user.name}</span>}
           <button className="logout-button" onClick={handleLogout}>Logout</button>
@@ -288,8 +286,8 @@ const StudentDashboard = () => {
                         id={`q${qIndex}-o${oIndex}`}
                         name={`question-${qIndex}`}
                         value={option}
-                        checked={answers[qIndex] === option}
-                        onChange={() => handleAnswerSelect(qIndex, option)}
+                        checked={selectedAnswers[qIndex] === option}
+                        onChange={(e) => handleAnswerSelect(qIndex, e.target.value)}
                         disabled={score !== null}
                       />
                       <label htmlFor={`q${qIndex}-o${oIndex}`}>{option}</label>
@@ -299,21 +297,21 @@ const StudentDashboard = () => {
               </div>
             ))}
             
-            {score === null ? (
-              <button 
-                className="submit-btn"
-                onClick={submitQuiz}
-                disabled={Object.keys(answers).length !== currentQuiz.questions.length}
-              >
-                Submit Quiz
-              </button>
-            ) : (
+            {showScore ? (
               <div className="score-section">
                 <h3>Your Score: {score.toFixed(2)}%</h3>
                 <button className="try-again-btn" onClick={backToQuizList}>
                   Back to Quiz List
                 </button>
               </div>
+            ) : (
+              <button 
+                className="submit-btn"
+                onClick={submitQuiz}
+                disabled={Object.keys(selectedAnswers).length !== currentQuiz.questions.length}
+              >
+                Submit Quiz
+              </button>
             )}
           </div>
         )}
