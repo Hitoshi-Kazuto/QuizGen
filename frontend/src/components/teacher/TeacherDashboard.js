@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import XLSX from 'xlsx-js-style';
+import { API_BASE_URL } from '../../config';
 import './TeacherDashboard.css';
-
-const API_BASE_URL = 'https://quizgenerator-6qge.onrender.com';
 
 function TeacherDashboard() {
   const navigate = useNavigate();
@@ -277,7 +276,7 @@ function TeacherDashboard() {
       
       yPos += splitQuestionText.length * 7;
       
-      if (q.type === 'mcq' && q.options) {
+      if ((q.type === 'mcq' || q.type === 'multi_answer') && q.options) {
         doc.setFontSize(optionFontSize);
         doc.setFont('helvetica', 'normal');
         
@@ -702,6 +701,11 @@ function TeacherDashboard() {
                           <div className="quiz-preview-option">B. False</div>
                         </>
                       )}
+                      {q.type === 'multi_answer' && q.options && q.options.map((option, optIndex) => (
+                        <div key={optIndex} className="quiz-preview-option">
+                          {String.fromCharCode(65 + optIndex)}. {option}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))}
