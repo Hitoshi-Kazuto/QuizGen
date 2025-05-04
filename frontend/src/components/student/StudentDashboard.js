@@ -99,6 +99,11 @@ const StudentDashboard = () => {
         // Quiz already attempted
         setError(response.data.message);
       } else {
+        // Check if the accessed quiz matches the selected quiz
+        if (response.data._id !== selectedQuiz._id) {
+          setError('Access code does not match the selected quiz');
+          return;
+        }
         setCurrentQuiz(response.data);
         setShowQuiz(true);
       }
