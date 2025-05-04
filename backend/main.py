@@ -50,6 +50,10 @@ app.add_middleware(
 async def root():
     return {"message": "Quiz Generator API is running"}
 
+@app.head("/ping")
+async def ping():
+    return
+
 # Pydantic models for request validation
 class QuizRequest(BaseModel):
     text: str
