@@ -9,7 +9,7 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className="hero-section">
         <nav className="landing-nav">
-          <div className="logo">TestifyAI</div>
+          <div className="logo">QuizVerse</div>
           <div className="nav-links">
             <a href="#features">Features</a>
             <a href="#how-it-works">How It Works</a>
@@ -30,7 +30,7 @@ const LandingPage = () => {
         </div>
         
         <div className="hero-image">
-          <img src={HeroImage} alt="TestifyAI Platform" />
+          <img src={HeroImage} alt="QuizVerse Platform" />
         </div>
       </section>
 
@@ -145,7 +145,7 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="demo-features">
-            <h3>Why Choose TestifyAI?</h3>
+            <h3>Why Choose QuizVerse?</h3>
             <ul>
               <li>✨ Save hours of manual quiz creation</li>
               <li>🤖 AI-powered question generation</li>
@@ -161,7 +161,7 @@ const LandingPage = () => {
       {/* CTA Section */}
       <section className="cta-section">
         <h2>Ready to Transform Your Teaching?</h2>
-        <p>Join thousands of educators who are saving time and creating better quizzes with TestifyAI.</p>
+        <p>Join thousands of educators who are saving time and creating better quizzes with QuizVerse.</p>
         <Link to="/register" className="primary-btn">Get Started Free</Link>
       </section>
 
@@ -169,7 +169,7 @@ const LandingPage = () => {
       <footer className="landing-footer">
         <div className="footer-content">
           <div className="footer-logo">
-            <h3>TestifyAI</h3>
+            <h3>QuizVerse</h3>
             <p>Transform your content into engaging quizzes with AI-powered technology.</p>
           </div>
           <div className="footer-links">
@@ -197,7 +197,7 @@ const LandingPage = () => {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2024 TestifyAI. All rights reserved.</p>
+          <p>&copy; 2024 QuizVerse. All rights reserved.</p>
         </div>
       </footer>
     </div>
