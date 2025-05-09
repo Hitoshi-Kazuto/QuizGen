@@ -43,7 +43,7 @@ root.render(
         } />
         <Route path="/quiz-generator" element={
           <ProtectedRoute>
-            <App />
+            <NotFound />
           </ProtectedRoute>
         } />
         
