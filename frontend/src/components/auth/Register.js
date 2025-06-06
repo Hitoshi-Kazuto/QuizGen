@@ -74,13 +74,13 @@ function Register() {
   return (
     <div className="auth-container">
       <div className="auth-nav">
-        <Link to="/" className="auth-logo">QuizVerse</Link>
+        <Link to="/" className="auth-logo">TestifyAI</Link>
       </div>
       
       <div className="auth-content">
         <div className="auth-box">
           <h2>Create an Account</h2>
-          <p className="auth-subtitle">Join QuizVerse to start creating quizzes</p>
+          <p className="auth-subtitle">Join TestifyAI to start creating quizzes</p>
           
           {error && <div className="error-message">{error}</div>}
           

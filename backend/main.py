@@ -13,7 +13,6 @@ from typing import List, Optional, Dict, Any
 from bson import ObjectId
 import requests
 from bs4 import BeautifulSoup
-import re
 from newspaper import Article
 import nltk
 

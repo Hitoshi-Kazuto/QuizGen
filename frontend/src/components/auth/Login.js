@@ -46,13 +46,13 @@ function Login() {
   return (
     <div className="auth-container">
       <div className="auth-nav">
-        <Link to="/" className="auth-logo">QuizVerse</Link>
+        <Link to="/" className="auth-logo">TestifyAI</Link>
       </div>
       
       <div className="auth-content">
         <div className="auth-box">
           <h2>Welcome Back</h2>
-          <p className="auth-subtitle">Sign in to your QuizVerse account</p>
+          <p className="auth-subtitle">Sign in to your TestifyAI account</p>
           
           {error && <div className="error-message">{error}</div>}
           

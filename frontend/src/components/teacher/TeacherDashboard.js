@@ -440,7 +440,7 @@ function TeacherDashboard() {
   return (
     <div className="teacher-dashboard">
       <nav className="dashboard-nav">
-        <h1>QuizVerse - Teacher Dashboard</h1>
+        <h1>TestifyAI - Teacher Dashboard</h1>
         <button onClick={handleLogout} className="logout-button">
           Logout
         </button>
